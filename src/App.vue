@@ -1,30 +1,58 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <h1 id="header">Transmission line simulation</h1>
+  <div id="sim">
+    <ParametersForm :process="process" />
+    <WaveChart :data="voltage" />
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
+<script setup lang="ts">
+import { ref } from "vue";
+
+import { InputParams, SimulationResult, leapfrog2 } from "./utils/leapfrog";
+
+import ParametersForm from "./components/ParametersForm.vue";
+import WaveChart from "./components/WaveChart.vue";
+
+const result = ref<SimulationResult>({
+  V: [],
+  I: [],
+});
+const voltage = ref(Array<number>(300).fill(0));
+const interval = ref<number | null>(null);
+
+const currentTime = ref<number>(0);
+
+const process = (parameters: InputParams) => {
+  console.log(parameters);
+  // result.value = leapfrog(500, 300, parameters);
+  result.value = leapfrog2(1000, 300, parameters);
+  console.log(result.value);
+
+  interval.value = setInterval(() => {
+    if (currentTime.value < result.value.V.length - 1) {
+      currentTime.value++;
+      console.log(currentTime.value);
+      voltage.value = result.value.V[currentTime.value];
+    } else {
+      //clearInterval(interval.value)
+    }
+  }, 10); // Update every second
+};
+</script>
+
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+#header {
+  padding: 15px;
+  margin: 0%;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+#sim {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  gap: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 </style>
