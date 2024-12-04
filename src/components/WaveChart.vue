@@ -46,6 +46,12 @@ const config = {
         display: false,
       },
     },
+    scales: {
+      y: {
+        suggestedMin: -1,
+        suggestedMax: 2,
+      },
+    },
   },
 };
 
@@ -66,7 +72,6 @@ watch(
     if (!chart) {
       return;
     }
-    console.log(newData);
     chart.data.datasets[0].data = newData;
     chart.update();
   }
