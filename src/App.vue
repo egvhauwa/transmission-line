@@ -3,6 +3,7 @@
   <div id="sim">
     <ParametersForm :process="process" />
     <WaveChart :data="voltage" />
+    <WaveChart :data="current" />
   </div>
 </template>
 
@@ -19,21 +20,23 @@ const result = ref<SimulationResult>({
   I: [],
 });
 const voltage = ref(Array<number>(301).fill(0));
+const current = ref(Array<number>(300).fill(0));
 const interval = ref<number | null>(null);
 
 const currentTime = ref<number>(0);
 
 const process = (parameters: InputParams) => {
   // result.value = leapfrog(500, 300, parameters);
-  result.value = leapfrog(1000, 300, parameters);
+  result.value = leapfrog(500, 300, parameters);
   if (interval.value) {
     clearInterval(interval.value);
   }
   currentTime.value = 0;
   interval.value = setInterval(() => {
-    if (currentTime.value < result.value.V.length - 1) {
+    if (currentTime.value < result.value.I.length - 1) {
       currentTime.value++;
       voltage.value = result.value.V[currentTime.value];
+      current.value = result.value.I[currentTime.value];
     } else {
       //clearInterval(interval.value)
     }
