@@ -10,7 +10,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import { InputParams, SimulationResult, leapfrog } from "./utils/leapfrog";
+import {
+  InputParams,
+  SimulationResult,
+  getMinimumLocations,
+  update,
+} from "./utils/fdtd";
 
 import ParametersForm from "./components/ParametersForm.vue";
 import WaveChart from "./components/WaveChart.vue";
@@ -26,8 +31,13 @@ const interval = ref<number | null>(null);
 const currentTime = ref<number>(0);
 
 const process = (parameters: InputParams) => {
-  // result.value = leapfrog(500, 300, parameters);
-  result.value = leapfrog(500, 300, parameters);
+  const locations = getMinimumLocations(
+    parameters.d,
+    parameters.v,
+    parameters.tRise
+  );
+  console.log(locations);
+  result.value = update(500, 300, parameters);
   if (interval.value) {
     clearInterval(interval.value);
   }

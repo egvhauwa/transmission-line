@@ -1,34 +1,49 @@
 // utils/leapfrog.ts
-import { egTijd } from "./egTijd";
+import { generator, getMinimumWavelength } from "./generator";
 
 export interface InputParams {
   Rc: number; // Characteristic impedance (Ohms)
   v: number; // Signal speed (m/s)
   d: number; // Line length (m)
-  Rg: number; // Generator impedance (Ohms)
+  Rg: number; // Generator impedance (Ohms)u
   Rl: number; // Load impedance (Ohms)
   Cl: number; // Load capacitance (nF)
   A: number; // Signal amplitude (V)
-  Tbit: number; // Bit duration (s)
-  tau_r: number; // Rise time (s)
+  tBit: number; // Bit duration (s)
+  tRise: number; // Rise time (s)
 }
 
 export interface SimulationResult {
-  V: number[][]; // Voltage matrix
-  I: number[][]; // Current matrix
+  V: number[][]; // Voltage
+  I: number[][]; // Current
 }
 
-export function leapfrog(
+export const getMinimumLocations = (
+  d: number,
+  v: number,
+  tRise: number
+): number => {
+  const minWaveLength = getMinimumWavelength(v, tRise);
+  // delta z <= min wavelength / 10 to avoid dispersion
+  return Math.ceil(d / (minWaveLength / 10));
+};
+
+export const update = (
   M: number,
   N: number,
   input: InputParams
-): SimulationResult {
+): SimulationResult => {
   // M = 1000, N = 300
-  const { Rc, v, d, Rg, Rl, Cl, A, Tbit, tau_r } = input;
+  const { Rc, v, d, Rg, Rl, Cl, A, tBit, tRise } = input;
+
+  // const lambda = 1/
 
   const z = d / N; // Space steps
   const t = z / v; // Time steps, courant limit
   const alpha = (v * t) / z; // Courant factor
+
+  console.log(`space step: ${z}`);
+  console.log(`Courant factor: ${alpha}`);
 
   const V: number[][] = Array.from({ length: M + 1 }, () =>
     Array(N + 1).fill(0)
@@ -37,7 +52,7 @@ export function leapfrog(
 
   for (let m = 1; m < M; m++) {
     // n = 0
-    const Eg = egTijd((m - 0.5) * t, A, Tbit, tau_r);
+    const Eg = generator((m - 0.5) * t, A, tBit, tRise);
     I[m][0] = I[m - 1][0] + alpha * (V[m][0] - V[m][1]);
     if (Rg === 0) {
       // Ideal voltage source
@@ -75,4 +90,4 @@ export function leapfrog(
     }
   }
   return { V, I };
-}
+};

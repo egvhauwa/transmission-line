@@ -82,7 +82,7 @@
       <div class="form-item">
         <label for="Tbit">Bit Duration (s)</label>
         <input
-          v-model="parameters.Tbit"
+          v-model="parameters.tBit"
           type="number"
           id="Tbit"
           step="any"
@@ -93,7 +93,7 @@
       <div class="form-item">
         <label for="tau_r">Rise Time (s)</label>
         <input
-          v-model="parameters.tau_r"
+          v-model="parameters.tRise"
           type="number"
           id="tau_r"
           step="any"
@@ -109,7 +109,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import type { InputParams } from "../utils/leapfrog";
+import type { InputParams } from "../utils/fdtd";
 
 const props = defineProps<{ process: Function }>();
 
@@ -121,8 +121,8 @@ const parameters = ref<InputParams>({
   Rl: 1000,
   Cl: 0,
   A: 1,
-  Tbit: 1e-8,
-  tau_r: 1e-9,
+  tBit: 1e-8,
+  tRise: 1e-9,
 });
 
 const submitForm = () => {
