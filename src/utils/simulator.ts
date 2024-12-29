@@ -45,15 +45,15 @@ export class Simulator {
 
     // delta z <= min wavelength / 10 to avoid dispersion
     const minWaveLength = getMinimumWavelength(v, tRise);
-    this.N = Math.ceil(d / (minWaveLength / 10));
+    this.N = Math.ceil(d / (minWaveLength / 20));
 
     this.deltaZ = d / this.N;
     this.deltaT = this.deltaZ / v; // Courant limit
     this.alpha = (v * this.deltaT) / this.deltaZ; // Courant factor
     this.timeStep = 0;
 
-    this.V = new Array(this.N + 1).fill(0);
-    this.I = new Array(this.N).fill(0);
+    this.V = Array(this.N + 1).fill(0);
+    this.I = Array(this.N).fill(0);
   }
 
   setParameters(parameters: InputParams): void {
@@ -67,7 +67,10 @@ export class Simulator {
     let { I, V } = this;
 
     // n = 0
-    const Eg = generator((timeStep - 0.5) * deltaT, A, tBit, tRise);
+    const Eg =
+      (generator((timeStep - 1) * deltaT, A, tBit, tRise) +
+        generator(timeStep * deltaT, A, tBit, tRise)) /
+      2;
     I[0] = I[0] + alpha * (V[0] - V[1]);
     if (Rg === 0) {
       // Ideal voltage source

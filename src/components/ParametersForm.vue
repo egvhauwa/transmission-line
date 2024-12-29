@@ -109,21 +109,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import type { InputParams } from "../utils/fdtd";
+import type { InputParams } from "../utils/simulator";
+import { defaultParameters } from "../utils/simulator";
 
 const props = defineProps<{ process: Function }>();
 
-const parameters = ref<InputParams>({
-  Rc: 50,
-  v: 2e8,
-  d: 10,
-  Rg: 50,
-  Rl: 1000,
-  Cl: 0,
-  A: 1,
-  tBit: 1e-8,
-  tRise: 1e-9,
-});
+const parameters = ref<InputParams>(defaultParameters);
 
 const submitForm = () => {
   props.process(parameters.value);
