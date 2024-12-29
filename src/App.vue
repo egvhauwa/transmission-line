@@ -10,46 +10,29 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import {
-  InputParams,
-  SimulationResult,
-  getMinimumLocations,
-  update,
-} from "./utils/fdtd";
+import { InputParams, Simulator } from "./utils/simulator";
 
 import ParametersForm from "./components/ParametersForm.vue";
 import WaveChart from "./components/WaveChart.vue";
 
-const result = ref<SimulationResult>({
-  V: [],
-  I: [],
-});
-const voltage = ref(Array<number>(301).fill(0));
-const current = ref(Array<number>(300).fill(0));
+const simulator: Simulator = new Simulator();
 const interval = ref<number | null>(null);
 
-const currentTime = ref<number>(0);
+const voltage = ref(<number[]>simulator.V);
+const current = ref(<number[]>simulator.I);
 
 const process = (parameters: InputParams) => {
-  const locations = getMinimumLocations(
-    parameters.d,
-    parameters.v,
-    parameters.tRise
-  );
-  console.log(locations);
-  result.value = update(500, 300, parameters);
+  // Clear interval
   if (interval.value) {
     clearInterval(interval.value);
   }
-  currentTime.value = 0;
+  // Set parameters
+  simulator.setParameters(parameters);
+  // Set interval
   interval.value = setInterval(() => {
-    if (currentTime.value < result.value.I.length - 1) {
-      currentTime.value++;
-      voltage.value = result.value.V[currentTime.value];
-      current.value = result.value.I[currentTime.value];
-    } else {
-      //clearInterval(interval.value)
-    }
+    simulator.updateTimeStep();
+    voltage.value = [...simulator.V];
+    current.value = [...simulator.I];
   }, 20); // Update every 20 ms
 };
 </script>

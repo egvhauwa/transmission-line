@@ -36,8 +36,6 @@ export const update = (
   // M = 1000, N = 300
   const { Rc, v, d, Rg, Rl, Cl, A, tBit, tRise } = input;
 
-  // const lambda = 1/
-
   const z = d / N; // Space steps
   const t = z / v; // Time steps, courant limit
   const alpha = (v * t) / z; // Courant factor
