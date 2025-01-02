@@ -1,19 +1,22 @@
 <template>
   <h1 id="header">Transmission line simulation</h1>
   <div id="sim">
-    <ParametersForm :process="process" />
+    <div>
+      <ParametersForm :process="process" />
+      <button @click="stop">Stop</button>
+    </div>
     <WaveChart :data="voltage" />
     <WaveChart :data="current" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue';
 
-import { InputParams, Simulator } from "./utils/simulator";
+import { InputParams, Simulator } from './utils/simulator';
 
-import ParametersForm from "./components/ParametersForm.vue";
-import WaveChart from "./components/WaveChart.vue";
+import ParametersForm from './components/ParametersForm.vue';
+import WaveChart from './components/WaveChart.vue';
 
 const simulator: Simulator = new Simulator();
 const interval = ref<number | null>(null);
@@ -34,6 +37,12 @@ const process = (parameters: InputParams) => {
     voltage.value = [...simulator.V];
     current.value = [...simulator.I];
   }, 20); // Update every 20 ms
+};
+
+const stop = () => {
+  if (interval.value) {
+    clearInterval(interval.value);
+  }
 };
 </script>
 

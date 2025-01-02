@@ -5,10 +5,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch } from 'vue';
 
-import { Chart, registerables } from "chart.js";
-import type { ChartConfiguration } from "chart.js";
+import { Chart, registerables } from 'chart.js';
+import type { ChartConfiguration } from 'chart.js';
 
 Chart.register(...registerables);
 
@@ -21,13 +21,13 @@ const data = {
   labels: props.data.map((_, index) => index),
   datasets: [
     {
-      label: "label",
+      label: 'label',
       data: props.data,
     },
   ],
 };
 const config = {
-  type: "line",
+  type: 'line',
   data: data,
   options: {
     animation: false,
@@ -40,7 +40,7 @@ const config = {
     plugins: {
       title: {
         display: true,
-        text: "title",
+        text: 'title',
       },
       legend: {
         display: false,
@@ -59,7 +59,7 @@ onMounted(() => {
   if (!chartRef.value) {
     return;
   }
-  const ctx = (chartRef.value as HTMLCanvasElement).getContext("2d");
+  const ctx = (chartRef.value as HTMLCanvasElement).getContext('2d');
   if (!ctx) {
     return;
   }

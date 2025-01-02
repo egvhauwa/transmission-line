@@ -1,4 +1,4 @@
-import { generator, getMinimumWavelength } from "./generator";
+import { generator, getMinimumWavelength } from './generator';
 
 export interface InputParams {
   Rc: number; // Characteristic impedance (Ohms)
@@ -97,13 +97,9 @@ export class Simulator {
     } else {
       // Boundary condition for n=N
       V[N] =
-        (V[N] + 2 * alpha * Rc * (I[N - 1] / Rc - V[N] / (2 * Rl))) /
-        (1 + (alpha * Rc) / Rl);
-
-      // V[N] =
-      //   (V[N] * (1 + (2 * alpha * Cl * Rc) / t - (alpha * Rc) / Rl) +
-      //     2 * alpha * I[N - 1]) /
-      //   (1 + (alpha * Rc) / Rl + (2 * alpha * Cl * Rc) / t);
+        (V[N] * (1 + (2 * alpha * Cl * Rc) / deltaT - (alpha * Rc) / Rl) +
+          2 * alpha * I[N - 1]) /
+        (1 + (alpha * Rc) / Rl + (2 * alpha * Cl * Rc) / deltaT);
     }
     this.timeStep = timeStep + 1;
   }
