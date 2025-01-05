@@ -30,7 +30,7 @@ const process = (parameters: InputParams) => {
     clearInterval(interval.value);
   }
   // Set parameters
-  simulator.setParameters(parameters);
+  simulator.setParameters({ ...parameters }); // spread operator to avoid live update of parameters
   // Set interval
   interval.value = setInterval(() => {
     simulator.updateTimeStep();
