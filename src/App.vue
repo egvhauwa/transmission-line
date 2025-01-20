@@ -1,12 +1,17 @@
 <template>
   <h1 id="header">Transmission line simulation</h1>
-  <div id="sim">
-    <div>
+  <div id="container">
+    <div id="parameters-form">
       <ParametersForm :process="process" />
       <button @click="stop">Stop</button>
     </div>
-    <WaveChart :data="voltage" />
-    <WaveChart :data="current" />
+    <div id="simulation">
+      <div id="wave-charts">
+        <WaveChart class="wave-chart" :data="voltage" />
+        <WaveChart class="wave-chart" :data="current" />
+      </div>
+      <p>Text</p>
+    </div>
   </div>
 </template>
 
@@ -48,16 +53,34 @@ const stop = () => {
 
 <style scoped>
 #header {
-  padding: 15px;
+  padding: 1rem;
   margin: 0%;
 }
 
-#sim {
+#container {
   display: flex;
-  flex-direction: row;
-  height: 100vh;
-  gap: 20px;
-  padding-left: 15px;
-  padding-right: 15px;
+  /* flex-wrap: wrap; */
+  gap: 1rem;
+}
+
+/* #parameters-form {
+  flex: 0 0 calc(20% - 1.5rem);
+} */
+
+#simulation {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#wave-charts {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: blue;
+}
+
+.wave-chart {
+  position: relative;
+  flex: 1 1 50%; /* Adjust size based on available space */
 }
 </style>

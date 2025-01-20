@@ -1,6 +1,8 @@
 <template>
   <div>
-    <canvas ref="chartRef" width="700" height="450"></canvas>
+    <div class="chart-container">
+      <canvas ref="chartRef"></canvas>
+    </div>
   </div>
 </template>
 
@@ -30,8 +32,9 @@ const config = {
   type: 'line',
   data: data,
   options: {
+    responsive: true,
+    maintainAspectRatio: false,
     animation: false,
-    // responsive: true,
     elements: {
       point: {
         pointStyle: false,
@@ -79,9 +82,7 @@ watch(
 </script>
 
 <style scoped>
-/* Add any styling you need */
-canvas {
-  max-width: 100%;
-  height: auto;
+.chart-container {
+  aspect-ratio: 16 / 9;
 }
 </style>
