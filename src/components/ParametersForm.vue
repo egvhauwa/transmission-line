@@ -30,10 +30,10 @@
       <ParameterInput
         v-model="parameters.Cl"
         label="Load Capacitance (pF)"
-        id="v"
+        id="Cl"
         :scale="1e-12"
       />
-      <ParameterInput v-model="parameters.A" label="Amplitude (V)" id="Rl" />
+      <ParameterInput v-model="parameters.A" label="Amplitude (V)" id="A" />
       <ParameterInput
         v-model="parameters.tBit"
         label="Bit Duration (ns)"

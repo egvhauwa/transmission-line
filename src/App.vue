@@ -6,11 +6,12 @@
       <button @click="stop">Stop</button>
     </div>
     <div id="simulation">
-      <div id="wave-charts">
-        <WaveChart class="wave-chart" :data="voltage" />
-        <WaveChart class="wave-chart" :data="current" />
+      <div id="wave-chart-left">
+        <WaveChart :data="voltage" />
       </div>
-      <p>Text</p>
+      <div id="wave-chart-right">
+        <WaveChart :data="current" />
+      </div>
     </div>
   </div>
 </template>
@@ -52,35 +53,27 @@ const stop = () => {
 </script>
 
 <style scoped>
-#header {
+/* #header {
   padding: 1rem;
   margin: 0%;
-}
+} */
 
 #container {
+  width: 60%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#simulation {
   display: flex;
-  /* flex-wrap: wrap; */
+  flex-wrap: wrap;
   gap: 1rem;
 }
 
-/* #parameters-form {
-  flex: 0 0 calc(20% - 1.5rem);
-} */
-
-#simulation {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-}
-
-#wave-charts {
-  display: flex;
-  flex-wrap: wrap;
-  background-color: blue;
-}
-
-.wave-chart {
-  position: relative;
-  flex: 1 1 50%; /* Adjust size based on available space */
+#wave-chart-left,
+#wave-chart-right {
+  flex: 1;
 }
 </style>
