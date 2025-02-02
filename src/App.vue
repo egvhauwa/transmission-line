@@ -1,10 +1,7 @@
 <template>
   <h1 id="header">Transmission line simulation</h1>
   <div id="container">
-    <div id="parameters-form">
-      <ParametersForm :process="process" />
-      <button @click="stop">Stop</button>
-    </div>
+    <ParametersForm :process="process" :stop="stop" />
     <div id="simulation">
       <div id="wave-chart-left">
         <WaveChart :data="voltage" />

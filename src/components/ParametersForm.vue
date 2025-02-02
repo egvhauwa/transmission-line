@@ -2,51 +2,56 @@
   <div>
     <h2>Parameters</h2>
     <form @submit.prevent="submitForm">
-      <ParameterInput
-        v-model="parameters.Rc"
-        label="Characteristic Impedance (Ohm)"
-        id="Rc"
-      />
-      <ParameterInput
-        v-model="parameters.v"
-        label="Signal Speed (m/s)"
-        id="v"
-      />
-      <ParameterInput
-        v-model="parameters.d"
-        label="Length of Line (m)"
-        id="d"
-      />
-      <ParameterInput
-        v-model="parameters.Rg"
-        label="Generator Impedance (Ohm)"
-        id="Rg"
-      />
-      <ParameterInput
-        v-model="parameters.Rl"
-        label="Load Impedance (Ohm)"
-        id="Rl"
-      />
-      <ParameterInput
-        v-model="parameters.Cl"
-        label="Load Capacitance (pF)"
-        id="Cl"
-        :scale="1e-12"
-      />
-      <ParameterInput v-model="parameters.A" label="Amplitude (V)" id="A" />
-      <ParameterInput
-        v-model="parameters.tBit"
-        label="Bit Duration (ns)"
-        id="tBit"
-        :scale="1e-9"
-      />
-      <ParameterInput
-        v-model="parameters.tRise"
-        label="Bit Rise Time (ns)"
-        id="tRise"
-        :scale="1e-9"
-      />
-      <button type="submit">Run Simulation</button>
+      <div id="parameters">
+        <ParameterInput
+          v-model="parameters.Rc"
+          label="Characteristic Impedance (Ω)"
+          id="Rc"
+        />
+        <ParameterInput
+          v-model="parameters.v"
+          label="Signal Speed (m/s)"
+          id="v"
+        />
+        <ParameterInput
+          v-model="parameters.d"
+          label="Length of Line (m)"
+          id="d"
+        />
+        <ParameterInput
+          v-model="parameters.Rg"
+          label="Generator Impedance (Ω)"
+          id="Rg"
+        />
+        <ParameterInput
+          v-model="parameters.Rl"
+          label="Load Impedance (Ω)"
+          id="Rl"
+        />
+        <ParameterInput
+          v-model="parameters.Cl"
+          label="Load Capacitance (pF)"
+          id="Cl"
+          :scale="1e-12"
+        />
+        <ParameterInput v-model="parameters.A" label="Amplitude (V)" id="A" />
+        <ParameterInput
+          v-model="parameters.tBit"
+          label="Bit Duration (ns)"
+          id="tBit"
+          :scale="1e-9"
+        />
+        <ParameterInput
+          v-model="parameters.tRise"
+          label="Bit Rise Time (ns)"
+          id="tRise"
+          :scale="1e-9"
+        />
+      </div>
+      <div id="controls">
+        <button type="submit">Run Simulation</button>
+        <button type="button" @click="props.stop">Stop</button>
+      </div>
     </form>
   </div>
 </template>
@@ -59,7 +64,10 @@ import { defaultParameters } from '../utils/simulator';
 
 import ParameterInput from './ParameterInput.vue';
 
-const props = defineProps<{ process: Function }>();
+const props = defineProps<{
+  process: (arg0: InputParams) => void;
+  stop: () => void;
+}>();
 
 const parameters = ref<InputParams>(defaultParameters);
 
@@ -69,9 +77,9 @@ const submitForm = () => {
 </script>
 
 <style scoped>
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+#parameters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+  gap: 1rem;
 }
 </style>
