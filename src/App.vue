@@ -1,6 +1,10 @@
 <template>
-  <h1 id="header">Transmission line simulation</h1>
-  <div id="container">
+  <div id="header">
+    <div class="container">
+      <h1>Transmission line simulation</h1>
+    </div>
+  </div>
+  <div class="container">
     <ParametersForm :process="process" :stop="stop" />
     <div id="simulation">
       <div id="wave-chart-left">
@@ -20,6 +24,8 @@ import { InputParams, Simulator } from './utils/simulator';
 
 import ParametersForm from './components/ParametersForm.vue';
 import WaveChart from './components/WaveChart.vue';
+
+import './assets/styles/container.css';
 
 const simulator: Simulator = new Simulator();
 const interval = ref<number | null>(null);
@@ -50,27 +56,27 @@ const stop = () => {
 </script>
 
 <style scoped>
-/* #header {
-  padding: 1rem;
-  margin: 0%;
-} */
+#header {
+  width: 100%;
+  padding: 1.5rem 0;
+  background-color: #1a1a1a;
+}
 
-#container {
-  width: 60%;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
+#header h1 {
+  margin: 0;
+  color: white;
 }
 
 #simulation {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  width: 100%;
 }
 
 #wave-chart-left,
 #wave-chart-right {
-  flex: 1;
+  flex: 1 1 300px; /* This is the key change */
+  min-width: 300px; /* Minimum width before wrapping */
 }
 </style>
