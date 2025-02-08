@@ -10,16 +10,16 @@
 import { ref, onMounted, watch } from 'vue';
 
 import { Chart, registerables } from 'chart.js';
-import type { ChartConfiguration } from 'chart.js';
+import type { ChartData, ChartConfiguration } from 'chart.js';
 
 Chart.register(...registerables);
 
 const props = defineProps<{ data: number[] }>();
 
 let chart: Chart | null = null;
-const chartRef = ref(null);
+const chartRef = ref<HTMLCanvasElement | null>(null);
 
-const data = {
+const data: ChartData = {
   labels: props.data.map((_, index) => index),
   datasets: [
     {
@@ -28,7 +28,7 @@ const data = {
     },
   ],
 };
-const config = {
+const config: ChartConfiguration = {
   type: 'line',
   data: data,
   options: {
@@ -62,11 +62,11 @@ onMounted(() => {
   if (!chartRef.value) {
     return;
   }
-  const ctx = (chartRef.value as HTMLCanvasElement).getContext('2d');
+  const ctx = chartRef.value.getContext('2d');
   if (!ctx) {
     return;
   }
-  chart = new Chart(ctx, config as ChartConfiguration);
+  chart = new Chart(ctx, config);
 });
 
 watch(
