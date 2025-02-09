@@ -7,12 +7,15 @@
   <div class="container">
     <ParametersForm :process="process" :stop="stop" />
     <div id="simulation">
-      <div id="wave-chart-left">
+      <div class="wave-chart">
         <WaveChart :data="voltage" />
       </div>
-      <div id="wave-chart-right">
+      <div class="wave-chart">
         <WaveChart :data="current" />
       </div>
+    </div>
+    <div id="smith-chart">
+      <SmithChart />
     </div>
   </div>
 </template>
@@ -23,7 +26,10 @@ import { ref } from 'vue';
 import { InputParams, Simulator } from './utils/simulator';
 
 import ParametersForm from './components/ParametersForm.vue';
+// @ts-ignore
 import WaveChart from './components/WaveChart.vue';
+// @ts-ignore
+import SmithChart from './components/SmithChart.vue';
 
 import './assets/styles/container.css';
 
@@ -69,14 +75,20 @@ const stop = () => {
 
 #simulation {
   display: flex;
+  align-items: stretch;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 2rem;
   width: 100%;
 }
 
-#wave-chart-left,
-#wave-chart-right {
-  flex: 1 1 300px; /* This is the key change */
-  min-width: 300px; /* Minimum width before wrapping */
+.wave-chart {
+  flex: 1.77 1 auto;
+  min-width: 300px;
+}
+
+#smith-chart {
+  flex: 1 1 auto;
+  min-width: 200px;
+  max-width: 500px;
 }
 </style>
