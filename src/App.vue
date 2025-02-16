@@ -7,15 +7,12 @@
   <div class="container">
     <ParametersForm :process="process" :stop="stop" />
     <div id="simulation">
-      <div class="wave-chart">
+      <div class="wave-chart card">
         <WaveChart :data="voltage" />
       </div>
-      <div class="wave-chart">
-        <WaveChart :data="current" />
+      <div class="smith-chart card">
+        <SmithChart />
       </div>
-    </div>
-    <div id="smith-chart">
-      <SmithChart />
     </div>
   </div>
 </template>
@@ -37,7 +34,6 @@ const simulator: Simulator = new Simulator();
 const interval = ref<number | null>(null);
 
 const voltage = ref(<number[]>simulator.V);
-const current = ref(<number[]>simulator.I);
 
 const process = (parameters: InputParams) => {
   // Clear interval
@@ -50,7 +46,6 @@ const process = (parameters: InputParams) => {
   interval.value = setInterval(() => {
     simulator.updateTimeStep();
     voltage.value = [...simulator.V];
-    current.value = [...simulator.I];
   }, 20); // Update every 20 ms
 };
 
@@ -63,8 +58,7 @@ const stop = () => {
 
 <style scoped>
 #header {
-  width: 100%;
-  padding: 1.5rem 0;
+  padding: 1.25rem 0;
   background-color: #1a1a1a;
 }
 
@@ -73,22 +67,50 @@ const stop = () => {
   color: white;
 }
 
-#simulation {
-  display: flex;
-  align-items: stretch;
-  flex-wrap: wrap;
-  gap: 2rem;
+@media (min-width: 850px) {
+  #simulation {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .wave-chart {
+    flex: 2;
+    aspect-ratio: 2 / 1;
+  }
+
+  .smith-chart {
+    flex: 1;
+    aspect-ratio: 1 / 1;
+  }
+}
+
+@media (max-width: 849px) {
+  #simulation {
+    flex-direction: column;
+  }
+
+  .wave-chart {
+    aspect-ratio: 2 / 1;
+    margin-bottom: 1rem;
+  }
+
+  .smith-chart {
+    aspect-ratio: 1 / 1;
+    width: max(50%, 250px);
+    margin: auto;
+  }
+}
+
+.card {
+  background: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+#results-table {
+  margin-top: 1rem;
   width: 100%;
-}
-
-.wave-chart {
-  flex: 1.77 1 auto;
-  min-width: 300px;
-}
-
-#smith-chart {
-  flex: 1 1 auto;
-  min-width: 200px;
-  max-width: 500px;
 }
 </style>

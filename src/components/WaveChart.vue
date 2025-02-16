@@ -1,8 +1,6 @@
 <template>
   <div class="chart-container">
-    <div class="chart">
-      <canvas ref="chartRef"></canvas>
-    </div>
+    <canvas ref="chartRef"></canvas>
   </div>
 </template>
 
@@ -81,15 +79,11 @@ watch(
 
 <style scoped>
 .chart-container {
-  position: relative;
-  padding-top: 56.25%; /* Maintain aspect ratio of 16:9 */
-}
-
-.chart {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
+}
+
+canvas {
+  max-width: 100% !important;
 }
 </style>
