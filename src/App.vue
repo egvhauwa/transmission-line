@@ -10,8 +10,10 @@
       <div class="wave-chart card">
         <WaveChart :data="voltage" />
       </div>
-      <div class="smith-chart card">
-        <SmithChart />
+      <div class="smith-chart-wrapper card">
+        <div class="smith-chart">
+          <SmithChart />
+        </div>
       </div>
     </div>
   </div>
@@ -78,7 +80,7 @@ const stop = () => {
     aspect-ratio: 2 / 1;
   }
 
-  .smith-chart {
+  .smith-chart-wrapper {
     flex: 1;
     aspect-ratio: 1 / 1;
   }
