@@ -1,12 +1,18 @@
 <template>
   <div class="parameter-input">
     <label :for="id">{{ label }}</label>
-    <input :id="id" v-model="unscaledInput" type="number" @input="scaleInput" />
+    <input
+      :id="id"
+      v-model="unscaledInput"
+      type="number"
+      required
+      oninvalid="this.setCustomValidity(' ')"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps<{
   label: string;
@@ -19,9 +25,9 @@ const model = defineModel({ type: Number, required: true });
 const scaleFactor: number = props.scale || 1; // Default scale factor is 1 (no scaling)
 const unscaledInput = ref<number>(model.value / scaleFactor);
 
-const scaleInput = () => {
-  model.value = unscaledInput.value * scaleFactor;
-};
+watch(unscaledInput, (newValue) => {
+  model.value = newValue * scaleFactor;
+});
 </script>
 
 <style scoped>
@@ -40,5 +46,9 @@ input {
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+input:invalid {
+  border-color: red;
 }
 </style>

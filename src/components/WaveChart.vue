@@ -85,5 +85,6 @@ watch(
 
 canvas {
   max-width: 100% !important;
+  max-height: 100% !important;
 }
 </style>
