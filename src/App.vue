@@ -1,53 +1,66 @@
 <template>
   <div id="header">
     <div class="container">
-      <h1>Transmission line simulation</h1>
+      <h1>Transmission Line Simulator</h1>
     </div>
   </div>
   <div class="container">
-    <ParametersForm :process="process" :stop="stop" />
+    <ParametersForm v-model="parameters" :process="process" :stop="stop" />
     <div id="simulation">
       <div class="wave-chart card">
         <WaveChart :data="voltage" />
       </div>
-      <div class="smith-chart-wrapper card">
-        <div class="smith-chart">
-          <SmithChart />
-        </div>
+      <div class="wave-chart card">
+        <WaveChart :data="current" />
       </div>
     </div>
+    <ResultsTable class="results-table card" :results="results" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
-import { InputParams, Simulator } from './utils/simulator';
+import { InputParams, Results, Simulator } from './utils/simulator';
+import { defaultParameters } from './utils/simulator';
 
 import ParametersForm from './components/ParametersForm.vue';
 // @ts-ignore
 import WaveChart from './components/WaveChart.vue';
 // @ts-ignore
 import SmithChart from './components/SmithChart.vue';
+import ResultsTable from './components/ResultsTable.vue';
 
 import './assets/styles/container.css';
 
 const simulator: Simulator = new Simulator();
 const interval = ref<number | null>(null);
+const parameters = ref<InputParams>(defaultParameters);
 
-const voltage = ref(<number[]>simulator.V);
+const voltage = ref<number[]>(simulator.V);
+const current = ref<number[]>(simulator.I);
+const results = ref<Results>(simulator.calculateResults());
+
+watch(
+  parameters,
+  (newParameters) => {
+    stop();
+    simulator.setParameters({ ...newParameters });
+    voltage.value = [...simulator.V];
+    current.value = [...simulator.I];
+    results.value = simulator.calculateResults();
+  },
+  { deep: true }
+);
 
 const process = (parameters: InputParams) => {
-  // Clear interval
-  if (interval.value) {
-    clearInterval(interval.value);
-  }
-  // Set parameters
-  simulator.setParameters({ ...parameters }); // spread operator to avoid live update of parameters
+  stop();
+  simulator.setParameters({ ...parameters });
   // Set interval
   interval.value = setInterval(() => {
     simulator.updateTimeStep();
     voltage.value = [...simulator.V];
+    current.value = [...simulator.I];
   }, 20); // Update every 20 ms
 };
 
@@ -69,37 +82,21 @@ const stop = () => {
   color: white;
 }
 
-@media (min-width: 850px) {
-  #simulation {
-    display: flex;
-    gap: 1rem;
-  }
+#simulation {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
 
-  .wave-chart {
-    flex: 2;
-    aspect-ratio: 2 / 1;
-  }
-
-  .smith-chart-wrapper {
-    flex: 1;
-    aspect-ratio: 1 / 1;
-  }
+.wave-chart {
+  aspect-ratio: 2 / 1;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 @media (max-width: 849px) {
   #simulation {
     flex-direction: column;
-  }
-
-  .wave-chart {
-    aspect-ratio: 2 / 1;
-    margin-bottom: 1rem;
-  }
-
-  .smith-chart {
-    aspect-ratio: 1 / 1;
-    width: max(50%, 250px);
-    margin: auto;
   }
 }
 
@@ -109,10 +106,5 @@ const stop = () => {
   padding: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-}
-
-#results-table {
-  margin-top: 1rem;
-  width: 100%;
 }
 </style>

@@ -24,9 +24,17 @@ export const defaultParameters = {
   tRise: 1e-9,
 };
 
+export interface Results {
+  Kl: number; // Reflection coefficient at the load
+  Kg: number; // Reflection coefficient at the generator
+  vswr: number; // Voltage Standing Wave Ratio
+  l: number; // Line length in wavelengths
+}
+
 export class Simulator {
   private parameters: InputParams = defaultParameters;
 
+  private minWaveLength: number;
   private N: number; // Location steps
   private deltaZ: number; // Location step size
   private deltaT: number; // Time step size
@@ -44,8 +52,8 @@ export class Simulator {
     const { v, d, tRise } = this.parameters;
 
     // delta z <= min wavelength / 10 to avoid dispersion
-    const minWaveLength = getMinimumWavelength(v, tRise);
-    this.N = Math.ceil(d / (minWaveLength / 20));
+    this.minWaveLength = getMinimumWavelength(v, tRise);
+    this.N = Math.ceil(d / (this.minWaveLength / 20));
 
     this.deltaZ = d / this.N;
     this.deltaT = this.deltaZ / v; // Courant limit
@@ -59,6 +67,21 @@ export class Simulator {
   setParameters(parameters: InputParams): void {
     this.parameters = parameters;
     this.initialize();
+  }
+
+  calculateResults(): Results {
+    const { Rc, Rg, Rl, d } = this.parameters;
+
+    const Kl = (Rl - Rc) / (Rl + Rc);
+    const Kg = (Rg - Rc) / (Rg + Rc);
+    const vswr = (1 + Kl) / (1 - Kl);
+    const l = d / this.minWaveLength;
+    return {
+      Kl,
+      Kg,
+      vswr,
+      l,
+    };
   }
 
   updateTimeStep(): void {

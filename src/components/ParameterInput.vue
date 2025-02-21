@@ -1,13 +1,7 @@
 <template>
   <div class="parameter-input">
     <label :for="id">{{ label }}</label>
-    <input
-      :id="id"
-      v-model="unscaledInput"
-      type="number"
-      required
-      oninvalid="this.setCustomValidity(' ')"
-    />
+    <input :id="id" v-model="unscaledInput" type="number" step="any" required />
   </div>
 </template>
 

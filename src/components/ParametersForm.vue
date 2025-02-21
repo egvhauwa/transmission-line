@@ -1,48 +1,35 @@
 <template>
   <div>
-    <h2>Parameters</h2>
     <form @submit.prevent="submitForm">
       <div id="parameters">
         <ParameterInput
-          v-model="parameters.Rc"
+          v-model="model.Rc"
           label="Characteristic Impedance (Ω)"
           id="Rc"
         />
+        <ParameterInput v-model="model.v" label="Signal Speed (m/s)" id="v" />
+        <ParameterInput v-model="model.d" label="Length of Line (m)" id="d" />
         <ParameterInput
-          v-model="parameters.v"
-          label="Signal Speed (m/s)"
-          id="v"
-        />
-        <ParameterInput
-          v-model="parameters.d"
-          label="Length of Line (m)"
-          id="d"
-        />
-        <ParameterInput
-          v-model="parameters.Rg"
+          v-model="model.Rg"
           label="Generator Impedance (Ω)"
           id="Rg"
         />
+        <ParameterInput v-model="model.Rl" label="Load Impedance (Ω)" id="Rl" />
         <ParameterInput
-          v-model="parameters.Rl"
-          label="Load Impedance (Ω)"
-          id="Rl"
-        />
-        <ParameterInput
-          v-model="parameters.Cl"
+          v-model="model.Cl"
           label="Load Capacitance (pF)"
           id="Cl"
           :scale="1e-12"
         />
-        <ParameterInput v-model="parameters.A" label="Amplitude (V)" id="A" />
+        <ParameterInput v-model="model.A" label="Amplitude (V)" id="A" />
         <ParameterInput
-          v-model="parameters.tBit"
+          v-model="model.tBit"
           label="Bit Duration (ns)"
           id="tBit"
           :scale="1e-9"
         />
         <ParameterInput
-          v-model="parameters.tRise"
+          v-model="model.tRise"
           label="Bit Rise Time (ns)"
           id="tRise"
           :scale="1e-9"
@@ -57,10 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-
 import type { InputParams } from '../utils/simulator';
-import { defaultParameters } from '../utils/simulator';
 
 import ParameterInput from './ParameterInput.vue';
 
@@ -69,10 +53,12 @@ const props = defineProps<{
   stop: () => void;
 }>();
 
-const parameters = ref<InputParams>(defaultParameters);
+const model = defineModel<InputParams>({
+  required: true,
+});
 
 const submitForm = () => {
-  props.process(parameters.value);
+  props.process(model.value);
 };
 </script>
 
@@ -81,5 +67,6 @@ const submitForm = () => {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
   gap: 1rem;
+  margin-top: 1rem;
 }
 </style>
