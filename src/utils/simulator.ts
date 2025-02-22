@@ -28,7 +28,7 @@ export interface Results {
   Kl: number; // Reflection coefficient at the load
   Kg: number; // Reflection coefficient at the generator
   vswr: number; // Voltage Standing Wave Ratio
-  l: number; // Line length in wavelengths
+  L: number; // Line length in wavelengths
 }
 
 export class Simulator {
@@ -75,12 +75,12 @@ export class Simulator {
     const Kl = (Rl - Rc) / (Rl + Rc);
     const Kg = (Rg - Rc) / (Rg + Rc);
     const vswr = (1 + Kl) / (1 - Kl);
-    const l = d / this.minWaveLength;
+    const L = d / this.minWaveLength;
     return {
       Kl,
       Kg,
       vswr,
-      l,
+      L,
     };
   }
 

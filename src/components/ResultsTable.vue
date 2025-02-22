@@ -26,7 +26,7 @@
         </tr>
         <tr>
           <td>L</td>
-          <td>{{ props.results.l.toFixed(2) }} λ</td>
+          <td>{{ props.results.L.toFixed(2) }} λ</td>
           <td>Line length in wavelengths</td>
         </tr>
       </tbody>
@@ -48,15 +48,15 @@ table {
   width: 100%;
 }
 
+th {
+  font-weight: bold;
+}
+
 th,
 td {
   padding: 12px;
   text-align: left;
-  /* border-bottom: 1px solid #ddd; */
-}
-
-th {
-  font-weight: bold;
+  border-bottom: 1px solid #ddd;
 }
 
 tr:hover {

@@ -5,13 +5,28 @@
     </div>
   </div>
   <div class="container">
-    <ParametersForm v-model="parameters" :process="process" :stop="stop" />
+    <ParametersForm
+      v-model="parameters"
+      :simulate="simulate"
+      :start="start"
+      :stop="stop"
+    />
     <div id="simulation">
       <div class="wave-chart card">
-        <WaveChart :data="voltage" />
+        <WaveChart
+          title="Voltage"
+          :data="voltage"
+          :amplitude="parameters.A"
+          :length="parameters.d"
+        />
       </div>
       <div class="wave-chart card">
-        <WaveChart :data="current" />
+        <WaveChart
+          title="Current"
+          :data="current"
+          :amplitude="parameters.A"
+          :length="parameters.d"
+        />
       </div>
     </div>
     <ResultsTable class="results-table card" :results="results" />
@@ -50,21 +65,29 @@ watch(
   { deep: true }
 );
 
-const process = (parameters: InputParams) => {
+const simulate = (parameters: InputParams) => {
   stop();
   simulator.setParameters({ ...parameters });
-  // Set interval
+  start();
+};
+
+const start = () => {
+  stop();
   interval.value = setInterval(() => {
-    simulator.updateTimeStep();
-    voltage.value = [...simulator.V];
-    current.value = [...simulator.I];
-  }, 20); // Update every 20 ms
+    update();
+  }, 15); // Update every 15 ms
 };
 
 const stop = () => {
   if (interval.value) {
     clearInterval(interval.value);
   }
+};
+
+const update = () => {
+  simulator.updateTimeStep();
+  voltage.value = [...simulator.V];
+  current.value = [...simulator.I];
 };
 </script>
 
@@ -100,7 +123,7 @@ const stop = () => {
 .card {
   background: white;
   border-radius: 0.5rem;
-  padding: 0.5rem;
+  padding: 0.75rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
 }

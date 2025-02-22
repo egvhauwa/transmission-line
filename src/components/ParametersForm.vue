@@ -36,8 +36,9 @@
         />
       </div>
       <div id="controls">
-        <button type="submit">Run Simulation</button>
+        <button type="submit">Simulate</button>
         <button type="button" @click="props.stop">Stop</button>
+        <button type="button" @click="props.start">Resume</button>
       </div>
     </form>
   </div>
@@ -49,7 +50,8 @@ import type { InputParams } from '../utils/simulator';
 import ParameterInput from './ParameterInput.vue';
 
 const props = defineProps<{
-  process: (arg0: InputParams) => void;
+  simulate: (arg0: InputParams) => void;
+  start: () => void;
   stop: () => void;
 }>();
 
@@ -58,7 +60,7 @@ const model = defineModel<InputParams>({
 });
 
 const submitForm = () => {
-  props.process(model.value);
+  props.simulate(model.value);
 };
 </script>
 
@@ -68,5 +70,12 @@ const submitForm = () => {
   grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
   gap: 1rem;
   margin-top: 1rem;
+}
+
+#controls {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 </style>

@@ -12,13 +12,20 @@ import type { ChartData, ChartConfiguration } from 'chart.js';
 
 Chart.register(...registerables);
 
-const props = defineProps<{ data: number[] }>();
+const props = defineProps<{
+  title: string;
+  data: number[];
+  amplitude: number;
+  length: number;
+}>();
 
 let chart: Chart | null = null;
 const chartRef = ref<HTMLCanvasElement | null>(null);
 
 const data: ChartData = {
-  labels: props.data.map((_, index) => index),
+  labels: props.data.map(
+    (_, index) => (index / (props.data.length - 1)) * props.length
+  ),
   datasets: [
     {
       label: 'label',
@@ -44,16 +51,25 @@ const config: ChartConfiguration = {
     plugins: {
       title: {
         display: true,
-        text: 'title',
+        text: props.title,
+        color: '#000000',
+        font: {
+          size: 16,
+        },
       },
       legend: {
         display: false,
       },
     },
     scales: {
+      x: {
+        type: 'linear',
+        min: 0,
+        max: props.length,
+      },
       y: {
-        suggestedMin: -1,
-        suggestedMax: 2,
+        suggestedMin: -props.amplitude,
+        suggestedMax: 2 * props.amplitude,
       },
     },
   },
@@ -77,7 +93,33 @@ watch(
       return;
     }
     chart.data.datasets[0].data = newData;
-    chart.update();
+    chart.data.labels = newData.map(
+      (_, index) => (index / (newData.length - 1)) * props.length
+    );
+    chart.update('none');
+  }
+);
+
+watch(
+  () => props.amplitude,
+  (newAmplitude) => {
+    if (!chart?.options?.scales?.y) {
+      return;
+    }
+    chart.options.scales.y.suggestedMin = -newAmplitude;
+    chart.options.scales.y.suggestedMax = 2 * newAmplitude;
+    chart.update('none');
+  }
+);
+
+watch(
+  () => props.length,
+  (newLength) => {
+    if (!chart?.options?.scales?.x) {
+      return;
+    }
+    chart.options.scales.x.max = newLength;
+    chart.update('none');
   }
 );
 </script>
