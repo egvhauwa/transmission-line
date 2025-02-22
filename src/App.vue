@@ -25,10 +25,7 @@ import { InputParams, Results, Simulator } from './utils/simulator';
 import { defaultParameters } from './utils/simulator';
 
 import ParametersForm from './components/ParametersForm.vue';
-// @ts-ignore
 import WaveChart from './components/WaveChart.vue';
-// @ts-ignore
-import SmithChart from './components/SmithChart.vue';
 import ResultsTable from './components/ResultsTable.vue';
 
 import './assets/styles/container.css';

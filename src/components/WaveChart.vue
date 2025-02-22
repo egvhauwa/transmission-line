@@ -4,52 +4,57 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 
-import { Chart } from 'chart.js';
+import { Chart, registerables } from 'chart.js';
+import type { ChartData, ChartConfiguration } from 'chart.js';
 
-const props = defineProps({ data: Array });
+Chart.register(...registerables);
 
-let chart = null;
-const chartRef = ref(null);
+const props = defineProps<{ data: number[] }>();
 
-const data = {
+let chart: Chart | null = null;
+const chartRef = ref<HTMLCanvasElement | null>(null);
+
+const data: ChartData = {
   labels: props.data.map((_, index) => index),
   datasets: [
     {
       label: 'label',
       data: props.data,
-      pointRadius: 0,
+      fill: true,
       borderColor: '#2196f3',
       backgroundColor: 'rgba(33, 150, 243, 0.2)',
     },
   ],
 };
-const config = {
+const config: ChartConfiguration = {
   type: 'line',
   data: data,
   options: {
+    responsive: true,
     maintainAspectRatio: false,
-    animation: {
-      duration: 0,
+    animation: false,
+    elements: {
+      point: {
+        pointStyle: false,
+      },
     },
-    title: {
-      display: true,
-      text: 'title',
-    },
-    legend: {
-      display: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'title',
+      },
+      legend: {
+        display: false,
+      },
     },
     scales: {
-      yAxes: [
-        {
-          ticks: {
-            suggestedMin: -1,
-            suggestedMax: 2,
-          },
-        },
-      ],
+      y: {
+        suggestedMin: -1,
+        suggestedMax: 2,
+      },
     },
   },
 };

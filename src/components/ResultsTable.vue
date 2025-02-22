@@ -10,12 +10,12 @@
       </thead>
       <tbody>
         <tr>
-          <td>K<sub>l</sub></td>
+          <td>K<sub>load</sub></td>
           <td>{{ props.results.Kl.toFixed(2) }}</td>
           <td>Reflection coefficient at the load</td>
         </tr>
         <tr>
-          <td>K<sub>g</sub></td>
+          <td>K<sub>gen</sub></td>
           <td>{{ props.results.Kg.toFixed(2) }}</td>
           <td>Reflection coefficient at the generator</td>
         </tr>
