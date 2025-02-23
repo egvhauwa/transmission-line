@@ -54,6 +54,8 @@ export class Simulator {
     // delta z <= min wavelength / 10 to avoid dispersion
     this.minWaveLength = getMinimumWavelength(v, tRise);
     this.N = Math.ceil(d / (this.minWaveLength / 20));
+    this.N = Math.max(this.N, 10); // at least 10 simulation steps
+    this.N = Math.min(this.N, 1000); // at most 1000 simulations steps (makes sure CPU can handle the simulations)
 
     this.deltaZ = d / this.N;
     this.deltaT = this.deltaZ / v; // Courant limit

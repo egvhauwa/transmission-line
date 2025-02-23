@@ -6,8 +6,16 @@
           v-model="model.Rc"
           label="Characteristic Impedance (Ω)"
           id="Rc"
+          :min="1e-9"
         />
-        <ParameterInput v-model="model.v" label="Signal Speed (m/s)" id="v" />
+        <ParameterInput
+          v-model="model.v"
+          label="Signal Speed (10⁸ m/s)"
+          id="v"
+          :min="1"
+          :max="3"
+          :scale="1e8"
+        />
         <ParameterInput v-model="model.d" label="Length of Line (m)" id="d" />
         <ParameterInput
           v-model="model.Rg"

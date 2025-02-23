@@ -1,7 +1,15 @@
 <template>
   <div class="parameter-input">
     <label :for="id">{{ label }}</label>
-    <input :id="id" v-model="unscaledInput" type="number" step="any" required />
+    <input
+      :id="id"
+      v-model="unscaledInput"
+      type="number"
+      step="any"
+      :min="min"
+      :max="props.max"
+      required
+    />
   </div>
 </template>
 
@@ -11,16 +19,29 @@ import { ref, watch } from 'vue';
 const props = defineProps<{
   label: string;
   id: string;
+  min?: number;
+  max?: number;
   scale?: number;
 }>();
 
 const model = defineModel({ type: Number, required: true });
 
+const min: number = props.min || 0;
 const scaleFactor: number = props.scale || 1; // Default scale factor is 1 (no scaling)
 const unscaledInput = ref<number>(model.value / scaleFactor);
 
+const isValidParameter = (parameter: number | string): boolean => {
+  if (typeof parameter === 'string') return false;
+  if (isNaN(parameter)) return false;
+  if (parameter < min) return false;
+  if (props.max !== undefined && parameter > props.max) return false;
+  return true;
+};
+
 watch(unscaledInput, (newValue) => {
-  model.value = newValue * scaleFactor;
+  if (isValidParameter(newValue)) {
+    model.value = newValue * scaleFactor;
+  }
 });
 </script>
 
