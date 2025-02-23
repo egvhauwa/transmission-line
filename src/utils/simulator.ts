@@ -29,6 +29,7 @@ export interface Results {
   Kg: number; // Reflection coefficient at the generator
   vswr: number; // Voltage Standing Wave Ratio
   L: number; // Line length in wavelengths
+  N: number; // Location steps
 }
 
 export class Simulator {
@@ -78,11 +79,13 @@ export class Simulator {
     const Kg = (Rg - Rc) / (Rg + Rc);
     const vswr = (1 + Kl) / (1 - Kl);
     const L = d / this.minWaveLength;
+    const N = this.N;
     return {
       Kl,
       Kg,
       vswr,
       L,
+      N,
     };
   }
 

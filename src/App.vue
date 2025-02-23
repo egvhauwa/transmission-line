@@ -15,6 +15,7 @@
       <div class="wave-chart card">
         <WaveChart
           title="Voltage"
+          xaxisTitle="Transmission Line Position (m)"
           :data="voltage"
           :amplitude="parameters.A"
           :length="parameters.d"
@@ -22,7 +23,8 @@
       </div>
       <div class="wave-chart card">
         <WaveChart
-          title="Current"
+          title="Current (x Characteristic Impedance)"
+          xaxisTitle="Transmission Line Position (m)"
           :data="current"
           :amplitude="parameters.A"
           :length="parameters.d"
@@ -109,7 +111,7 @@ const update = () => {
 }
 
 .wave-chart {
-  aspect-ratio: 2 / 1;
+  aspect-ratio: 1.8 / 1;
   width: 100% !important;
   height: 100% !important;
 }

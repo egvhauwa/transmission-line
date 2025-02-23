@@ -29,6 +29,11 @@
           <td>{{ props.results.L.toFixed(2) }} λ</td>
           <td>Line length in wavelengths</td>
         </tr>
+        <tr>
+          <td>N</td>
+          <td>{{ props.results.N }}</td>
+          <td>Number of location steps along the transmission line</td>
+        </tr>
       </tbody>
     </table>
   </div>

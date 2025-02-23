@@ -14,6 +14,7 @@ Chart.register(...registerables);
 
 const props = defineProps<{
   title: string;
+  xaxisTitle: string;
   data: number[];
   amplitude: number;
   length: number;
@@ -63,6 +64,10 @@ const config: ChartConfiguration = {
     },
     scales: {
       x: {
+        title: {
+          display: true,
+          text: props.xaxisTitle,
+        },
         type: 'linear',
         min: 0,
         max: props.length,
