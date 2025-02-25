@@ -32,6 +32,7 @@
       </div>
     </div>
     <ResultsTable class="results-table card" :results="results" />
+    <Explanation />
   </div>
 </template>
 
@@ -44,6 +45,7 @@ import { defaultParameters } from './utils/simulator';
 import ParametersForm from './components/ParametersForm.vue';
 import WaveChart from './components/WaveChart.vue';
 import ResultsTable from './components/ResultsTable.vue';
+import Explanation from './components/Explanation.vue';
 
 import './assets/styles/container.css';
 

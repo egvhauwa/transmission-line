@@ -10,19 +10,14 @@
       </thead>
       <tbody>
         <tr>
-          <td>K<sub>load</sub></td>
-          <td>{{ props.results.Kl.toFixed(2) }}</td>
-          <td>Reflection coefficient at the load</td>
-        </tr>
-        <tr>
           <td>K<sub>gen</sub></td>
           <td>{{ props.results.Kg.toFixed(2) }}</td>
           <td>Reflection coefficient at the generator</td>
         </tr>
         <tr>
-          <td>VSWR</td>
-          <td>{{ props.results.vswr.toFixed(2) }}</td>
-          <td>Voltage Standing Wave Ratio</td>
+          <td>K<sub>load</sub></td>
+          <td>{{ props.results.Kl.toFixed(2) }}</td>
+          <td>Reflection coefficient at the load</td>
         </tr>
         <tr>
           <td>L</td>
@@ -32,7 +27,7 @@
         <tr>
           <td>N</td>
           <td>{{ props.results.N }}</td>
-          <td>Number of location steps along the transmission line</td>
+          <td>Number of space steps along the transmission line</td>
         </tr>
       </tbody>
     </table>
