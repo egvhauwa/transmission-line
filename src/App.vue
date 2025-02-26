@@ -32,7 +32,7 @@
       </div>
     </div>
     <ResultsTable class="results-table card" :results="results" />
-    <Explanation />
+    <Explanation id="explanation" />
   </div>
 </template>
 
@@ -130,5 +130,10 @@ const update = () => {
   padding: 0.75rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
+}
+
+#explanation {
+  margin-top: 2rem;
+  margin-bottom: 3rem;
 }
 </style>
