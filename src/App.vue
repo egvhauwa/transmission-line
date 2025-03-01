@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 
 import { InputParams, Results, Simulator } from './utils/simulator';
 import { defaultParameters } from './utils/simulator';
@@ -50,12 +50,16 @@ import Explanation from './components/Explanation.vue';
 import './assets/styles/container.css';
 
 const simulator: Simulator = new Simulator();
-const interval = ref<number | null>(null);
 const parameters = ref<InputParams>(defaultParameters);
 
 const voltage = ref<number[]>(simulator.V);
 const current = ref<number[]>(simulator.I);
 const results = ref<Results>(simulator.calculateResults());
+
+const frameId = ref<number | null>(null);
+const lastTime = ref<number>(0);
+const fps = ref<number>(60);
+const frameInterval = computed(() => 1000 / fps.value);
 
 watch(
   parameters,
@@ -75,23 +79,32 @@ const simulate = (parameters: InputParams) => {
   start();
 };
 
-const start = () => {
-  stop();
-  interval.value = setInterval(() => {
-    update();
-  }, 15); // Update every 15 ms
-};
-
-const stop = () => {
-  if (interval.value) {
-    clearInterval(interval.value);
-  }
-};
-
 const update = () => {
   simulator.updateTimeStep();
   voltage.value = [...simulator.V];
   current.value = [...simulator.I];
+};
+
+const start = () => {
+  stop();
+  lastTime.value = performance.now();
+  animationLoop(performance.now());
+};
+
+const animationLoop = (timestamp: number) => {
+  const elapsed = timestamp - lastTime.value;
+  if (elapsed >= frameInterval.value) {
+    update();
+    lastTime.value = timestamp - (elapsed % frameInterval.value);
+  }
+  frameId.value = requestAnimationFrame(animationLoop);
+};
+
+const stop = () => {
+  if (frameId.value !== null) {
+    cancelAnimationFrame(frameId.value);
+    frameId.value = null;
+  }
 };
 </script>
 
