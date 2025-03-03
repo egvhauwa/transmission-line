@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="simulate">
       <div id="parameters">
         <ParameterInput
           v-model="model.Rc"
@@ -45,8 +45,10 @@
       </div>
       <div id="controls">
         <button type="submit">Simulate</button>
-        <button type="button" @click="props.stop">Stop</button>
-        <button type="button" @click="props.start">Resume</button>
+        <button type="button" @click="toggleSimulation" :disabled="isReset">
+          {{ isReset || isRunning ? 'Stop' : 'Resume' }}
+        </button>
+        <button type="button" @click="props.reset">reset</button>
       </div>
     </form>
   </div>
@@ -61,14 +63,25 @@ const props = defineProps<{
   simulate: (arg0: InputParams) => void;
   start: () => void;
   stop: () => void;
+  reset: () => void;
+  isRunning: boolean;
+  isReset: boolean;
 }>();
 
 const model = defineModel<InputParams>({
   required: true,
 });
 
-const submitForm = () => {
+const simulate = () => {
   props.simulate(model.value);
+};
+
+const toggleSimulation = () => {
+  if (props.isRunning) {
+    props.stop();
+  } else {
+    props.start();
+  }
 };
 </script>
 
@@ -82,8 +95,12 @@ const submitForm = () => {
 
 #controls {
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
   margin-top: 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+button {
+  flex: 1;
 }
 </style>

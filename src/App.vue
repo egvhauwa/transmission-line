@@ -10,6 +10,9 @@
       :simulate="simulate"
       :start="start"
       :stop="stop"
+      :reset="reset"
+      :isRunning="isRunning"
+      :isReset="isReset"
     />
     <div id="simulation">
       <div class="wave-chart card">
@@ -51,6 +54,8 @@ import './assets/styles/container.css';
 
 const simulator: Simulator = new Simulator();
 const parameters = ref<InputParams>(defaultParameters);
+const isRunning = ref(false);
+const isReset = ref(true);
 
 const voltage = ref<number[]>(simulator.V);
 const current = ref<number[]>(simulator.I);
@@ -64,6 +69,7 @@ const frameInterval = computed(() => 1000 / fps.value);
 watch(
   parameters,
   (newParameters) => {
+    console.log(newParameters);
     stop();
     simulator.setParameters({ ...newParameters });
     voltage.value = [...simulator.V];
@@ -77,6 +83,7 @@ const simulate = (parameters: InputParams) => {
   stop();
   simulator.setParameters({ ...parameters });
   start();
+  isReset.value = false;
 };
 
 const update = () => {
@@ -89,6 +96,7 @@ const start = () => {
   stop();
   lastTime.value = performance.now();
   animationLoop(performance.now());
+  isRunning.value = true;
 };
 
 const animationLoop = (timestamp: number) => {
@@ -105,6 +113,12 @@ const stop = () => {
     cancelAnimationFrame(frameId.value);
     frameId.value = null;
   }
+  isRunning.value = false;
+};
+
+const reset = () => {
+  parameters.value = { ...defaultParameters };
+  isReset.value = true;
 };
 </script>
 

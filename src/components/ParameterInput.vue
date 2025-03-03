@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps<{
   label: string;
@@ -28,7 +28,15 @@ const model = defineModel({ type: Number, required: true });
 
 const min: number = props.min || 0;
 const scaleFactor: number = props.scale || 1; // Default scale factor is 1 (no scaling)
-const unscaledInput = ref<number>(model.value / scaleFactor);
+
+const unscaledInput = computed({
+  get: () => model.value / scaleFactor,
+  set: (newValue) => {
+    if (isValidParameter(newValue)) {
+      model.value = newValue * scaleFactor;
+    }
+  },
+});
 
 const isValidParameter = (parameter: number | string): boolean => {
   if (typeof parameter === 'string') return false;
@@ -37,12 +45,6 @@ const isValidParameter = (parameter: number | string): boolean => {
   if (props.max !== undefined && parameter > props.max) return false;
   return true;
 };
-
-watch(unscaledInput, (newValue) => {
-  if (isValidParameter(newValue)) {
-    model.value = newValue * scaleFactor;
-  }
-});
 </script>
 
 <style scoped>
@@ -60,7 +62,7 @@ input {
   padding: 8px;
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 0.5rem;
 }
 
 input:invalid {
