@@ -7,18 +7,18 @@
   <div class="container">
     <ParametersForm
       v-model="parameters"
-      :simulate="simulate"
-      :start="start"
-      :stop="stop"
-      :reset="reset"
-      :isRunning="isRunning"
-      :isReset="isReset"
+      :is-running="isRunning"
+      :is-reset="isReset"
+      @simulate="simulate"
+      @start="start"
+      @stop="stop"
+      @reset="reset"
     />
     <div id="simulation">
       <div class="wave-chart card">
         <WaveChart
           title="Voltage"
-          xaxisTitle="Transmission Line Position (m)"
+          xaxis-title="Transmission Line Position (m)"
           :data="voltage"
           :amplitude="parameters.A"
           :length="parameters.d"
@@ -27,7 +27,7 @@
       <div class="wave-chart card">
         <WaveChart
           title="Current (x Characteristic Impedance)"
-          xaxisTitle="Transmission Line Position (m)"
+          xaxis-title="Transmission Line Position (m)"
           :data="current"
           :amplitude="parameters.A"
           :length="parameters.d"
@@ -35,7 +35,7 @@
       </div>
     </div>
     <ResultsTable class="results-table card" :results="results" />
-    <Explanation id="explanation" />
+    <TheAbout id="about" />
   </div>
 </template>
 
@@ -48,7 +48,7 @@ import { defaultParameters } from './utils/simulator';
 import ParametersForm from './components/ParametersForm.vue';
 import WaveChart from './components/WaveChart.vue';
 import ResultsTable from './components/ResultsTable.vue';
-import Explanation from './components/Explanation.vue';
+import TheAbout from './components/TheAbout.vue';
 
 import './assets/styles/container.css';
 import './assets/styles/card.css';
@@ -70,7 +70,6 @@ const frameInterval = computed(() => 1000 / fps.value);
 watch(
   parameters,
   (newParameters) => {
-    console.log(newParameters);
     stop();
     simulator.setParameters({ ...newParameters });
     voltage.value = [...simulator.V];
@@ -152,7 +151,7 @@ const reset = () => {
   }
 }
 
-#explanation {
+#about {
   margin-top: 2rem;
   margin-bottom: 3rem;
 }

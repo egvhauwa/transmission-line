@@ -89,7 +89,7 @@ export class Simulator {
   updateTimeStep(): void {
     const { Rc, Rg, Rl, Cl, A, tBit, tRise } = this.parameters;
     const { deltaT, alpha, N, timeStep } = this;
-    let { I, V } = this;
+    const { I, V } = this;
 
     // n = 0
     const Eg =

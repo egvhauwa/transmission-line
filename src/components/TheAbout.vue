@@ -1,5 +1,5 @@
 <template>
-  <div class="explanatory-text">
+  <div>
     <h2>About the Simulation</h2>
     <p>
       This simulation models the behavior of voltage and current signals on a
