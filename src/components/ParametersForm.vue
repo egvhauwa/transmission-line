@@ -48,7 +48,7 @@
         <button type="button" @click="toggleSimulation" :disabled="isReset">
           {{ isReset || isRunning ? 'Stop' : 'Resume' }}
         </button>
-        <button type="button" @click="props.reset">reset</button>
+        <button type="button" @click="props.reset">Reset</button>
       </div>
     </form>
   </div>

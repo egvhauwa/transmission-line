@@ -51,6 +51,7 @@ import ResultsTable from './components/ResultsTable.vue';
 import Explanation from './components/Explanation.vue';
 
 import './assets/styles/container.css';
+import './assets/styles/card.css';
 
 const simulator: Simulator = new Simulator();
 const parameters = ref<InputParams>(defaultParameters);
@@ -124,7 +125,7 @@ const reset = () => {
 
 <style scoped>
 #header {
-  padding: 1.25rem 0;
+  padding: 1rem 0;
   background-color: #1a1a1a;
 }
 
@@ -149,14 +150,6 @@ const reset = () => {
   #simulation {
     flex-direction: column;
   }
-}
-
-.card {
-  background: white;
-  border-radius: 0.5rem;
-  padding: 0.75rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
 }
 
 #explanation {
